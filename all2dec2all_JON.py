@@ -1,10 +1,27 @@
 import os
 import math
+import enum
 import sys
 import ast
 
+class convOperation:
+    placeHolder = 1
 
-def dec2binConvert():
+# Conversion functions
+
+def bin2dec():
+    print("Input binary string: ")
+    binStrInit = input() #Seeing if prompt text is screwing with the answer 
+    binStr = binStrInit.replace(" ", "")
+    binSum = 0
+    for i in range(-1, -(len(binStr))-1, -1):
+        if binStr[(i)] == "1":
+            binSum = binSum + (2 ** (-i - 1))
+    
+    print("--------------------\nDiagnostic: ", type(binStr), "\nDiagnostic 2: ", isinstance(binStr, str), "\nBit Length: ", len(binStr), "\nCleaned Input:", binStr)
+    print("--------------------\nResult: ", binSum)
+
+def dec2bin():
     usrSelReturn = 0
     while usrSelReturn == 0:
         inputModeTEMP = input("Choose number input:\n1. Simple (Only text, no complex symbols besides decimal points)\n2. Complex (Can put resolved equations in here)\nUser Choice: ")
@@ -111,6 +128,44 @@ def dec2binConvert():
 
     print(binStrFin)
 
+# Dialogue tree data
 
+def convertFromDiaTree():
+    usrConvInitSel = int(input("Please choose a base system to convert from:\n1. Decimal\n2. Binary\n3. Octal\n4. Hexadecimal\n5. Custom Bases (WIP)\n6. Nevermind\nUser Choice: "))
+    if usrConvInitSel in range(6):
+        dialogueTrees.get(usrConvInitSel) # fully expecting this fucker to trip me up and have me re-define the number outside of nesting here
+    else:
+        print("Incompatible selection. Try again or exit with LCtrl + C.")
+        dialogueTrees.get("init")
+    pass
 
-dec2binConvert()
+def terminationDiaTree():
+    sys.exit()
+
+# Integumentary data
+
+dialogueTrees = {
+    "init": convertFromDiaTree(),
+    "end": terminationDiaTree(),        # yeah the dictionary approach doesnt work, fuck this im going to sleep
+    1:bin2dec()
+}
+
+# Nothing besides THE MAIN FUNCTION should go below this comment
+
+def dec2allMain():
+    dialogueTrees = {
+    "init": convertFromDiaTree(),
+    "end": terminationDiaTree(),
+    1:bin2dec()
+}
+    usrInitSel = 0
+    usrInitReturn = 0
+    while usrInitSel == 0:
+        usrInitReturn = int(input("Welcome to All2Dec2All, a poly-base numeric conversion app. Please choose an option: \n1. Convert \n2. Quit \nSelection: "))
+        if usrInitReturn == 1:
+            usrInitSel = usrInitReturn
+            dialogueTrees.get("init")
+        elif usrInitReturn != 1:
+            dialogueTrees.get("end")
+
+dec2allMain()
