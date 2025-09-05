@@ -1,5 +1,5 @@
 import math
-
+#testing
 def Bin2DecFront(InputStr):
     BinarySum = 0
     for i in range(1, (len(InputStr)+1)):
