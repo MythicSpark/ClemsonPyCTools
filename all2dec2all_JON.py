@@ -1,223 +1,59 @@
 import os
 import math
-import enum
 import sys
+import enum
 import ast
 
-# Classes
+# Classhole
 
-class conversionOperation:
-    def __init__(self):
-        pass
+class baseNumber:
 
-    def placeholder():
-        pass
-        
-class systemOperation:
-    def __init__(self):
-        pass
+    def __init__(self, stringValueArray, baseValue):
+        self._stringValueArray = stringValueArray
+        self._baseValue = baseValue
 
+    def __str__(self):
+        return f"DIAGNOSTIC:\nConstant Array: {self.stringValueArray}\nBase Number: {self.baseValue}"
 
-
-# Conversion macros 
-
-def binaryConvert():
-    print("Input binary string: ")
-    binStrInit = input() #Seeing if prompt text is screwing with the answer 
-    binStr = binStrInit.replace(" ", "")
-    binSum = 0
-
-    decimalSpot = int(binStr.find("."))
-
-    if decimalSpot == -1:
-        for i in range(-1, -(len(binStr))-1, -1):
-            if binStr[(i)] == "1":
-                binSum = binSum + (2 ** (-i - 1))
-    elif decimalSpot != -1:
-        usrBinFront = binStr[0:decimalSpot]
-        BinFrontSum = 0
-        usrBinBack = binStr[decimalSpot+1:]
-        BinBackSum = 0
-        for i in range(-1, -(len(usrBinFront))-1, -1):
-            if usrBinFront[(i)] == "1":
-                BinFrontSum = BinFrontSum + (2 ** (-i - 1))
-        for i in range(0, len(usrBinBack), 1):
-            if usrBinBack[(i)] == "1":
-                BinBackSum = BinBackSum + (2 ** (-i - 1))
-        binSum = BinFrontSum + BinBackSum
-        
+    @property
+    def stringValueArray(self):
+        return self._stringValueArray
     
-    print("--------------------\nDiagnostic: ", type(binStr), "\nDiagnostic 2: ", isinstance(binStr, str), "\nBit Length: ", len(binStr), "\nCleaned Input:", binStr)
-    print("--------------------\nResult: ", binSum)
+    @stringValueArray.setter
+    def stringValueArray(self, value):
+        self._stringValueArray = value
+    
+    @property
+    def baseValue(self):
+        return self._baseValue
+    
+    @baseValue.setter
+    def baseValue(self, value):
+        if (type(value) != int):
+            print("Fractional number systems not supported")
+        elif (value <= 0):
+            print("Zero or negative system values not supported")
 
-def dec2binConvert():
-    usrSelReturn = 0
-    while usrSelReturn == 0:
-        inputModeTEMP = input("Choose number input:\n1. Simple (Only text, no complex symbols besides decimal points)\n2. Complex (Can put resolved equations in here)\nUser Choice: ")
-        if len(inputModeTEMP) == 1:
-            inputMode = int(inputModeTEMP)
-            if inputMode == 1:
-                decIntRaw = input("----------------------------------\nInput simple decimal string: ")
-                usrSelReturn = 1
-            elif inputMode == 2:
-                decIntRawTemp = input("----------------------------------\nInput math equation: ")
-            
-                # "oh but jon evals are DAAAAANGEROOOOUS" yeah mang i dont give a fuck if someone's hacking into government servers with a python calculator, i think bigger problems would exist if that were possible
-                # ast module saves the day (no it didnt)
+# Drivers
 
-                decIntRaw = str(eval(decIntRawTemp))
-                usrSelReturn = 1
-            else:
-                print("----------------------------------\nMaybe learn to read before doing math")
-                sys.exit()
-        else:
-            print("----------------------------------\nMaybe learn to read before doing math")
-            sys.exit()
+def anyBNumVals():
+    pass
 
-    decimalSpot = int(decIntRaw.find("."))
+def any2dec():
+    pass
 
-    doesInputExist = False
+def main():
+    usrArrayInput = list(input("Input constant string: "))
+    usrBaseInput = int(input("Input constant base system: "))
+    anyBNum = baseNumber(usrArrayInput,usrBaseInput)
+    print("--------------------\n", anyBNum)
 
-    if len(decIntRaw) != 0:
-        doesInputExist = True
+    decimalBNum = 0
+    anyBNumStrLen = int(len(anyBNum.stringValueArray)) # Integer length of the constant array
+    for i in range(0, anyBNumStrLen, 1):
+        decimalBNum += (int(anyBNum.stringValueArray[i]) * (anyBNum.baseValue ** (anyBNumStrLen - 1 - i)))
 
-    print("Diagnostic - Location of decimal:", decimalSpot)
-
-    # This is after the stripped down version and might not work yet
-
-    binStrFin = ""
-
-    if decimalSpot == -1 and doesInputExist == True: # Decimal not detected
-        binStrArray = []
-        decInt = int(float(decIntRaw))
-        while decInt != 0:
-            if decInt % 2 == 1:
-                binStrArray.append("1")
-                decInt = int(round(decInt / 2))
-            elif decInt % 2 == 0:
-                binStrArray.append("0")
-                decInt = int(round(decInt / 2))
-        binStrArray.reverse()
-        binStrFin = binStrFin.join(binStrArray)
-    elif decimalSpot >= 0 and doesInputExist == True: # Decimal detected
-        if decIntRaw[0] != ".":
-            decFrontTemp = int(float(decIntRaw[0:decimalSpot]))
-            decFront = decFrontTemp
-            print("DECFRONT: ", decFront)
-            binFrontArray = []
-            doesFrontArrayExist = True
-        else:
-            binFrontArray = "DNE"
-            doesFrontArrayExist = False
-        if decIntRaw[-1] != ".":
-            decBackTemp = float(decIntRaw[decimalSpot:])
-            decBack = decBackTemp
-            print("DECBACK: ", decBack)
-            binBackArray = []
-            doesBackArrayExist = True
-        else:
-            binBackArray = "DNE"
-            doesBackArrayExist = False
-
-        # had to declare decimal spot as an integer outside of loop first; same procedure for decimal regions
-
-        print("----------------------------------\nFeature not complete\n----------------------------------")
-
-        finishStatus = 0
-        while finishStatus < 2:
-            if doesFrontArrayExist == True:
-                while (decFront != 0):
-                #segment for decFront
-                    if decFront % 2 == 1:
-                        binFrontArray.append("1")
-                        decFront = int(decFront / 2)
-                    elif decFront % 2 == 0:
-                        binFrontArray.append("0")
-                        decFront = int(decFront / 2)
-            finishStatus = finishStatus + 1
-            print("DIAGNOSTIC: Finished processing decFront\nCurrent finishStatus Value: ", finishStatus, "\n----------------------------------")
-            
-            if doesBackArrayExist == True:
-                while (decBack != 0):
-                #segment for decBack
-                    decBack = decBack * 2
-                    if decBack < 1.0:
-                        binBackArray.append("0")
-                    elif decBack >= 1.0:
-                        binBackArray.append("1")
-                        decBack = decBack - 1.0
-            finishStatus = finishStatus + 1
-            print("DIAGNOSTIC: Finished processing decBack\nCurrent finishStatus Value: ", finishStatus, "\n----------------------------------")
-            pass
-
-        #current issue is that after so many decimal places, the fractional binary just shits out and doesnt exist anymore
-        #(THIS LINE FIXED) aaaand this is a problem because the length and therefore accuracy is chained to one or the other end
-        #BIG PROBLEM: this shit may take forever lmao, enjoy the memory leak
-        #POSSIBLE FIX: I forgot to add the decBack mult in lmao
-        #POSSIBLE REASON: SO i may or may not have put finishStatus in the wrong spot earlier, sequence breaking the loop and making a memory hog 
-
-        #prep for final
-
-        if doesBackArrayExist == True and doesFrontArrayExist == True:
-            binFrontArray.reverse()
-            binFrontArray.append(".")
-            binMeld = binFrontArray + binBackArray
-        elif doesFrontArrayExist == True and doesBackArrayExist == False:
-            binFrontArray.reverse()
-            binFrontArray.append(".")
-            binMeld = binFrontArray
-        elif doesBackArrayExist == True and doesFrontArrayExist == False:
-            binMeld = binBackArray
-            binMeld.insert(0, ".")
-        else: 
-            print("No input detected. Exiting...")
-            sys.exit()
-
-        print("DIAGNOSTIC:\nFRONT ARRAY: ", binFrontArray, "\nBACK ARRAY: ", binBackArray)
+    print(f"--------------------\nDecimal Output: {decimalBNum}")       
 
 
-        print("DIAGNOSTIC for BINMELD: ", binMeld)
-
-        binStrFin = binStrFin.join(binMeld)
-    elif doesInputExist == False:
-        print("Incompatible input detected. Exiting...")
-        sys.exit() 
-
-    else:
-        print("What the fuck have you done")
-        sys.exit()
-
-    print("----------------------------------\nBinary String Output: ", binStrFin)
-
-# Dialogue macros
-
-
-def terminationDiaTree(exitCode):
-    messageCodes = {0: 'User terminated', }
-
-    print(f"Exited with code: {exitCode}\nReason: {messageCodes.get(exitCode)}")
-    sys.exit()
-
-# Integumentary data
-
-
-
-# Nothing besides THE MAIN FUNCTION should go below this comment
-
-def dec2allMain():
-    usrInitSel = 0
-    usrInitReturn = 0
-    while usrInitSel == 0:
-        usrInitReturn = int(input("Welcome to All2Dec2All, a poly-base numeric conversion app. Please choose an option: \n1. Convert \n2. Quit \nSelection: "))
-        while usrInitReturn == 0:
-            usrConvInitSel = int(input("Please choose a base system to convert from:\n1. Decimal\n2. Binary\n3. Octal\n4. Hexadecimal\n5. Custom Bases (WIP)\n6. Nevermind\nUser Choice: "))
-            if usrConvInitSel in range(1,6):
-                print("Find input dialogue discipline")
-            else:
-                print("Incompatible selection. Try again or exit program.")
-                terminationCode = 0
-                while terminationCode == 0:
-                    usrTermCode = input("1. Continue\n2. Exit\nSelection: ")
-
-        
-dec2allMain()
+main()
